@@ -168,9 +168,9 @@ subplot(2, 2, 2);
 imagesc(X_recovered)
 title(sprintf('Compressed, with %d colors.', K));
 
-% Experement with bit shift method
-B = double(imread('bird_small.png'));
-B = bitshift(B, -4);
+% Experement with bit shift method and error estimation
+orig = double(imread('bird_small.png'));
+B = bitshift(orig, -4);
 B = B / 16;
 
 subplot(2, 2, 3);
@@ -183,11 +183,10 @@ colors2 = length(unique(B * 16));
 fprintf('Number of distinct RGB values in K-mean compressed image: %d\n', colors1)
 fprintf('Number of distinct RGB valuesrs in scaling image: %d\n', colors2)
 
-orig = double(imread('bird_small.png'));
-diff1 = X_recovered * 256 - orig;
+diff1 = int8(X_recovered * 256 - orig);
 diff1 = sum(diff1(:)) / (img_size(1) * img_size(2));
 
-diff2 = B * 256 - orig;
+diff2 = int8(B * 256 - orig);
 diff2 = sum(diff2(:)) / (img_size(1) * img_size(2));
 
 fprintf('Errors of kmean and scaling: %d, %d\n', diff1, diff2);
