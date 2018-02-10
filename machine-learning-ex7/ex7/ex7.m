@@ -159,14 +159,38 @@ X_recovered = centroids(idx,:);
 X_recovered = reshape(X_recovered, img_size(1), img_size(2), 3);
 
 % Display the original image 
-subplot(1, 2, 1);
+subplot(2, 2, 1);
 imagesc(A); 
 title('Original');
 
 % Display compressed image side by side
-subplot(1, 2, 2);
+subplot(2, 2, 2);
 imagesc(X_recovered)
 title(sprintf('Compressed, with %d colors.', K));
+
+% Experement with bit shift method
+B = double(imread('bird_small.png'));
+B = bitshift(B, -4);
+B = B / 16;
+
+subplot(2, 2, 3);
+imagesc(B);
+
+title(sprintf('Compress by shifting pixel values by -4 bits'));
+
+colors1 = length(unique(X_recovered * 16));
+colors2 = length(unique(B * 16));
+fprintf('Number of distinct RGB values in K-mean compressed image: %d\n', colors1)
+fprintf('Number of distinct RGB valuesrs in scaling image: %d\n', colors2)
+
+orig = double(imread('bird_small.png'));
+diff1 = X_recovered * 256 - orig;
+diff1 = sum(diff1(:)) / (img_size(1) * img_size(2));
+
+diff2 = B * 256 - orig;
+diff2 = sum(diff2(:)) / (img_size(1) * img_size(2));
+
+fprintf('Errors of kmean and scaling: %d, %d\n', diff1, diff2);
 
 
 fprintf('Program paused. Press enter to continue.\n');
