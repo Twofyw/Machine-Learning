@@ -8,8 +8,8 @@ function [U, S] = pca(X)
 [m, n] = size(X);
 
 % You need to return the following variables correctly.
-U = zeros(n);
-S = zeros(n);
+% U = zeros(n);
+% S = zeros(n);
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should first compute the covariance matrix. Then, you
@@ -19,7 +19,9 @@ S = zeros(n);
 % Note: When computing the covariance matrix, remember to divide by m (the
 %       number of examples).
 %
+Sigma = X' * X / m;
 
+[U, S, ~] = svd(Sigma);
 
 
 
